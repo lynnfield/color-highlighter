@@ -37,14 +37,17 @@ import com.mallowigi.search.parsers.ColorCtorParser
 import com.mallowigi.search.parsers.ColorMethodParser
 import com.mallowigi.search.parsers.ColorParser
 import org.jetbrains.kotlin.psi.KtFile
+import training.featuresSuggester.getParentByPredicate
 import java.awt.Color
 
 class KotlinVisitor : ColorVisitor() {
 
+  private val callExpression = "CALL_EXPRESSION"
+  private val integerConstant = "INTEGER_CONSTANT"
   private val allowedTypes = listOf(
-    "INTEGER_CONSTANT",
+    integerConstant,
     "STRING_TEMPLATE",
-    "CALL_EXPRESSION",
+    callExpression,
     "REFERENCE_EXPRESSION"
   )
 
@@ -67,6 +70,7 @@ class KotlinVisitor : ColorVisitor() {
   override fun accept(element: PsiElement): Color? {
     val type = PsiUtilCore.getElementType(element).toString()
     if (type !in allowedTypes) return null
+    if (type == integerConstant && element.getParentByPredicate { PsiUtilCore.getElementType(it).toString() == callExpression } != null) return null
 
     val value = element.text
     return ColorSearchEngine.getColor(value, this)

@@ -48,8 +48,8 @@ class ColorCtorParser : ColorParser {
 
       return when {
         params == 1 -> {// single hex int
-            val hex = parseComponent(getNextNumber(tokenizer)) as Int
-            Color(hex)
+            val hex = parseComponent(getNextNumber(tokenizer)) as UInt
+            Color(hex.toInt(), hex > 0xFFFFFFu)
         }
 
         params == 2 -> {// hex int followed with hasAlpha

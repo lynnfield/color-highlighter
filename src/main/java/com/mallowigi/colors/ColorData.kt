@@ -56,7 +56,7 @@ class ColorData(
     part.endsWith("f") -> part.substring(0, part.length - 1).toFloat()
     part.contains(".") -> part.toFloat()
     part.endsWith("%") -> part.substring(0, part.length - 1).toInt() / 100.0f
-    else -> parseInt(part)
+    else -> parseUInt(part)
   }
 
   /** Parse single component of a `Color(h,s,l)` form. */
@@ -81,9 +81,9 @@ class ColorData(
    */
   fun getNextParam(next: String): String = next.split(":")[1]
 
-  private fun parseInt(part: @NonNls String?): Int = when {
-    part!!.lowercase(Locale.getDefault()).startsWith("0x") -> part.substring(2).toInt(16)
-    part.startsWith("0") && part.length > 1 -> part.substring(1).toInt(8)
-    else -> part.toInt()
+  private fun parseUInt(part: @NonNls String?): UInt = when {
+    part!!.lowercase(Locale.getDefault()).startsWith("0x") -> part.substring(2).toUInt(16)
+    part.startsWith("0") && part.length > 1 -> part.substring(1).toUInt(8)
+    else -> part.toUInt()
   }
 }
